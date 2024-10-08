@@ -1,7 +1,4 @@
-Name: Ranvir Malik and Krish Savla
-Date: 4/23/2022
-Assignment: Project 3 - gerp
-Course: Comp 15
+Authors: Ranvir Malik and ksavla01
 
 *******************************************************************************
 
@@ -9,7 +6,6 @@ Purpose:
 The purpose of this program is to create a word search system given a directory
 of files allows the user to look up any word and the program will produce all 
 file paths, line numbers, and line where the inputted word appears. 
-
 
 
 To run the program: 
@@ -73,7 +69,7 @@ data structures section
 
 
 Data Structures
-For this assignment we used hashes and array lists. The structure of our
+For this assignment, we used hashes and array lists. The structure of our
 program consisted of a hashtable of structs. The struct
 (which is called variation) contained a string, which held the lowercase
 version of the word that was read in, and a vector
@@ -90,7 +86,7 @@ data structures we have learned. Hash tables have constant time access and when
 indexing hundreds of thousands of words, that is very important. Since the
 struct in the main hash table (variation) only stored the lowercase version
 of the word, the vector of structs within the variation (FP) had to store the 
-original version of the word incase the user wanted to perform a case sensitive
+original version of the word in case the user wanted to perform a case sensitive
 search. Essentially, the vector within the variation struct stored the various
 alternate forms the word could appear within a text. For example, "am", "Am",
 and "AM" would each be added to the vector for the hashed word "am".
