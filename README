@@ -1,0 +1,143 @@
+Name: Ranvir Malik and Krish Savla
+Date: 4/23/2022
+Assignment: Project 3 - gerp
+Course: Comp 15
+
+*******************************************************************************
+
+Purpose:
+The purpose of this program is to create a word search system given a directory
+of files allows the user to look up any word and the program will produce all 
+file paths, line numbers, and line where the inputted word appears. 
+
+
+
+To run the program: 
+To compile and run the program, enter "make" into the terminal and then run the
+program by typing "./gerp [Directory Name]" 
+
+Files Provided: 
+
+gerp1.h - This file is the header file for the gerp class. It contains the
+          headers of all the public member and private member functions 
+          as well as the definitions of the private member variables of
+          the class. It is referred to as gerp1 as it is our second implementation
+          of gerp
+
+gerp1.cpp - This file contains the implementation of the gerp class and 
+            defines all the member functions declared in the header file.
+
+main.cpp -- This file is the driver file for the whole program and tests the
+            and contains the code to run gerp correctly.
+
+stringProcessing.h -- this file is the header file for the stringProcessing
+                      class. It contains the member function for the class. 
+
+stringProcessing.cpp -- this file contains the implementation of the
+                        stringProcessing class and the definition of the
+                        member function of the class.
+
+unit_tests.h - this file contains all the tests that were run
+               to test the functionality of the member functions
+               of the gerp, FSTree, and the stringProcessing class. 
+      
+README -- this file contains all the information about the program and any
+          known bugs that exist.
+
+Makefile -- this file compiles and links the respective files in order to 
+            create an executable file and run the program. 
+
+output.txt -- output of our gerp program when run with the
+              smallGutenberg directory. 
+
+DirNode.h -- header file for the DirNode class. These are the leaves of the FSTree which
+             stores the files in the inputted directory. 
+
+FSTree.h -- this is the header file for the FSTree class. This tree will store
+            all the folders and files read in from the inputted directory. 
+
+
+Architectural Overview
+Starting with reading in the directory into a tree, the FSTree class uses
+the DirNode class in order to create a tree with the subdirectories and
+files that were in the inputted from the user's directory. From there,
+we got a pointer to the root of the tree generated, which is a DirNode.
+From there, we open the "shallowest files" first and then progressivley
+traverse the tree in order to get to the "deepest files". We send the 
+respective filepaths for files to our insert function, which opens them 
+individually, reads in every word, and indexes it in our hash table. 
+When we read in the individual words of each file, we used the stringProcessing 
+class to strip the word of any special characters such as quotation marks, 
+periods, commas, etc. The explanation of the architecture is continued in the 
+data structures section
+
+
+Data Structures
+For this assignment we used hashes and array lists. The structure of our
+program consisted of a hashtable of structs. The struct
+(which is called variation) contained a string, which held the lowercase
+version of the word that was read in, and a vector
+of another struct. This struct (which is called FP) contained the original 
+word that was read in from the file (not the lowercase version), 
+an integer which represneted an index, an integer that represented the line 
+number of the line the word was found on, and a string which contained the 
+file path of where the word was found. 
+
+When each word was read in from the file, a hash value was created
+for the word and the word was hashed into the main array. It was essential to
+use a hash table since that data structure has the best time complexity of the
+data structures we have learned. Hash tables have constant time access and when
+indexing hundreds of thousands of words, that is very important. Since the
+struct in the main hash table (variation) only stored the lowercase version
+of the word, the vector of structs within the variation (FP) had to store the 
+original version of the word incase the user wanted to perform a case sensitive
+search. Essentially, the vector within the variation struct stored the various
+alternate forms the word could appear within a text. For example, "am", "Am",
+and "AM" would each be added to the vector for the hashed word "am".
+
+The FP struct also stored the line number of the line where the word appeared
+in the file and the filepath of the file that the word appeared in. It was 
+important to store the line number where the word was found because that
+stopped the program from adding duplicate filepaths for the same word
+found in the same line. For example, if there was a line in a file that 
+read, "I drove my car and I took the T". If the user searches the word "I",
+the line should only print once instead of twice. 
+
+The FP struct also stored an integer which represented an index for 
+another array list. This array list, called "filepaths" stored the 
+line where a word appeared. Everytime a word was indexed, the line the word
+appeared in would be added to this vector and the index of that line would 
+be stored in the FP struct with the word. This was very important to improving
+the time complexity because this granted constant time access to the line 
+where the word appeared in. So, when trying to find and print out where a 
+certain word appeared, it was all done in constant time. When printing to the
+output file, the file path, line number, and line were parsed together. 
+
+In addition to constant time access, hashes were especially important to use
+because they also have constant time when indexing/adding items. There are some
+drawbacks to hashes. When implementing hashes, you have to account for
+collisions. These usually occur when the program uses a poor hash value to 
+index the elements. Collisions occurr when two or more elements have the same
+hash value. There are two ways of dealing with collisions in hashes. One is
+probing, where the element is indexed at the next empty bucket after the hash
+value. In gerp, we decided to use linear probing. The other is chaining, where
+each bucked in the hash is an array list. Another drawback to hashes is that, 
+whenever the hash exapnds, every item in the hash needs to be rehashed with the
+new table size. In our implementation, we expanded every time we got to the end
+while probing.
+
+In addition to hashes, we used arraylists to store data with the hashes in our
+structs. There are several
+advantages and disadvantages to an array list. One big advantage to array lists
+is that array lists do not have a fixed size. However, it takes large amounts 
+of memory in order to add an element in front and, in some cases, in the middle
+of an array list as the whole list after the element inserted will have to be
+shifted. On the other hand, finding a particular element in an array list is 
+very efficient as one would just have to provide the specific index of that
+element. One other disadvantage of the array list is that, at times, it may
+use a large amount of memory, even though there are not that many items in 
+the array list. Since our expand functions doubles the capacity of the
+array, eventually, there may be many indicies of the array that exist in
+memory, but do not actually hold a value in them.
+
+
